@@ -1,66 +1,223 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { CalendarIcon, MapPinIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { ResponsiveGrid } from "~~/components/ResponsiveGrid";
+
+// Mock events data
+const MOCK_EVENTS = [
+  {
+    id: 1,
+    title: "Community Cleanup Day",
+    description: "Join us for a day of cleaning up the local park and surrounding areas.",
+    imageUrl: "https://placehold.co/1200x600/3b82f6/ffffff?text=Community+Cleanup+Day",
+    date: "2025-08-15",
+    location: "Central Park",
+    attendees: 45,
+    category: "Environmental",
+  },
+  {
+    id: 2,
+    title: "Tech Workshop: Blockchain Basics",
+    description: "Learn the fundamentals of blockchain technology and how it's changing the world.",
+    imageUrl: "https://placehold.co/1200x600/10b981/ffffff?text=Blockchain+Workshop",
+    date: "2025-08-20",
+    location: "Tech Hub Downtown",
+    attendees: 120,
+    category: "Education",
+  },
+  {
+    id: 3,
+    title: "Charity Run for Education",
+    description: "5K run to raise funds for local schools and educational programs.",
+    imageUrl: "https://placehold.co/1200x600/ef4444/ffffff?text=Charity+Run",
+    date: "2025-09-05",
+    location: "Riverside Track",
+    attendees: 230,
+    category: "Fundraising",
+  },
+  {
+    id: 4,
+    title: "Community Garden Planting",
+    description: "Help plant new trees and flowers in our community garden.",
+    imageUrl: "https://placehold.co/1200x600/f59e0b/ffffff?text=Garden+Planting",
+    date: "2025-09-12",
+    location: "Community Garden",
+    attendees: 78,
+    category: "Environmental",
+  },
+  {
+    id: 5,
+    title: "Local Business Fair",
+    description: "Support local businesses and entrepreneurs at our annual fair.",
+    imageUrl: "https://placehold.co/1200x600/8b5cf6/ffffff?text=Business+Fair",
+    date: "2025-09-25",
+    location: "Town Square",
+    attendees: 350,
+    category: "Community",
+  },
+];
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
+  console.log(connectedAddress);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-scroll carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % MOCK_EVENTS.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Handle manual navigation
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide(prev => (prev + 1) % MOCK_EVENTS.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide(prev => (prev - 1 + MOCK_EVENTS.length) % MOCK_EVENTS.length);
+  };
 
   return (
     <>
-      <div className="flex items-center flex-col grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <div className="flex justify-center items-center space-x-2 flex-col">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
+      <div className="flex flex-col items-center">
+        {/* Carousel section - 70vh height */}
+        <div className="relative w-full h-[70vh] overflow-hidden">
+          {/* Carousel slides */}
+          <div
+            className="flex transition-transform duration-500 ease-in-out h-full"
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          >
+            {MOCK_EVENTS.map(event => (
+              <div key={event.id} className="min-w-full h-full relative">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
+                <Image
+                  src={event.imageUrl}
+                  alt={event.title}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                  sizes="100vw"
+                  priority={event.id === 1}
+                />
+                <div className="absolute bottom-0 left-0 p-8 z-20 text-white w-full md:w-2/3">
+                  <h2 className="text-4xl font-bold mb-2">{event.title}</h2>
+                  <p className="text-lg mb-4">{event.description}</p>
+                  <div className="flex flex-wrap gap-4 mb-6">
+                    <div className="flex items-center">
+                      <CalendarIcon className="h-5 w-5 mr-2" />
+                      <span>{new Date(event.date).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <MapPinIcon className="h-5 w-5 mr-2" />
+                      <span>{event.location}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <UserGroupIcon className="h-5 w-5 mr-2" />
+                      <span>{event.attendees} participants</span>
+                    </div>
+                  </div>
+                  <Link href={`/eventos/${event.id}`}>
+                    <button className="btn btn-primary">Learn More</button>
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
 
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
+          {/* Navigation arrows */}
+          <button
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full z-30"
+            onClick={prevSlide}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+          <button
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full z-30"
+            onClick={nextSlide}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+
+          {/* Dots navigation */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
+            {MOCK_EVENTS.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full ${index === currentSlide ? "bg-white" : "bg-white/50"}`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col md:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
+        {/* Featured events section */}
+        <div className="flex flex-col w-full items-center justify-center px-4 py-8">
+          <div className="w-full flex max-w-screen-2xl flex-col items-center justify-center">
+            <h2 className="text-3xl font-bold mb-8 text-center">Featured Events</h2>
+            <ResponsiveGrid>
+              {MOCK_EVENTS.map(event => (
+                <div key={event.id} className="card bg-base-100 shadow-xl">
+                  <figure className="h-48 relative">
+                    <Image src={event.imageUrl} unoptimized alt={event.title} fill className="object-cover" />
+                  </figure>
+                  <div className="card-body">
+                    <div className="badge badge-secondary mb-2">{event.category}</div>
+                    <h3 className="card-title">{event.title}</h3>
+                    <p className="line-clamp-2">{event.description}</p>
+                    <div className="flex justify-between items-center mt-4">
+                      <div className="flex items-center">
+                        <CalendarIcon className="h-4 w-4 mr-1" />
+                        <span className="text-sm">{new Date(event.date).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <UserGroupIcon className="h-4 w-4 mr-1" />
+                        <span className="text-sm">{event.attendees}</span>
+                      </div>
+                    </div>
+                    <div className="card-actions justify-end mt-4">
+                      <Link href={`/eventos/${event.id}`}>
+                        <button className="btn btn-primary btn-sm">View Details</button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </ResponsiveGrid>
+            <div className="text-center mt-10">
+              <Link href="/eventos">
+                <button className="btn btn-outline btn-lg">View All Events</button>
+              </Link>
             </div>
           </div>
         </div>
