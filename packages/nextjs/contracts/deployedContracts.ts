@@ -140,7 +140,7 @@ const deployedContracts = {
       deployedOnBlock: 4,
     },
     EventManager: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
       abi: [
         {
           anonymous: false,
@@ -189,6 +189,25 @@ const deployedContracts = {
             },
           ],
           name: "EventoCreado",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "voluntario",
+              type: "address",
+            },
+          ],
+          name: "VoluntarioAprobado",
           type: "event",
         },
         {
@@ -277,6 +296,29 @@ const deployedContracts = {
             },
           ],
           name: "actualizarEvento",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "voluntario",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "solicitante",
+              type: "address",
+            },
+          ],
+          name: "aprobarVoluntario",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -444,6 +486,11 @@ const deployedContracts = {
               internalType: "address",
               name: "direccion",
               type: "address",
+            },
+            {
+              internalType: "bool",
+              name: "aprobado",
+              type: "bool",
             },
           ],
           stateMutability: "view",
@@ -631,10 +678,34 @@ const deployedContracts = {
                   name: "direccion",
                   type: "address",
                 },
+                {
+                  internalType: "bool",
+                  name: "aprobado",
+                  type: "bool",
+                },
               ],
               internalType: "struct EventManager.DatosVoluntario",
               name: "",
               type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+          ],
+          name: "obtenerDireccionesVoluntarios",
+          outputs: [
+            {
+              internalType: "address[]",
+              name: "",
+              type: "address[]",
             },
           ],
           stateMutability: "view",
@@ -711,6 +782,52 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+          ],
+          name: "obtenerTodosLosVoluntarios",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "string",
+                  name: "nombre",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "email",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "telefono",
+                  type: "string",
+                },
+                {
+                  internalType: "address",
+                  name: "direccion",
+                  type: "address",
+                },
+                {
+                  internalType: "bool",
+                  name: "aprobado",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct EventManager.DatosVoluntario[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [],
           name: "totalEventos",
           outputs: [
@@ -725,10 +842,10 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 2,
+      deployedOnBlock: 14,
     },
     ValidacionManager: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
       abi: [
         {
           inputs: [
@@ -810,7 +927,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 3,
+      deployedOnBlock: 15,
     },
     VoluntarioToken: {
       address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",

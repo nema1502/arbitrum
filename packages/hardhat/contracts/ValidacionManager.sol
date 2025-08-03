@@ -20,6 +20,7 @@ interface IEventManager {
         string category;
     }
     function eventos(uint256 eventoId) external view returns (Evento memory);
+    function aprobarVoluntario(uint256 eventoId, address voluntario, address solicitante) external;
 }
 
 contract ValidacionManager {
@@ -43,6 +44,9 @@ contract ValidacionManager {
 
         uint256 recompensa = evento.recompensaPorVoluntario;
         voluntarioToken.mint(_voluntario, recompensa);
+
+        // Marcar al voluntario como aprobado en EventManager
+        eventManager.aprobarVoluntario(_eventoId, _voluntario, msg.sender);
     }
 
     /**
@@ -58,6 +62,8 @@ contract ValidacionManager {
         for (uint i = 0; i < _voluntarios.length; i++) {
             if (_voluntarios[i] != address(0)) {
                 voluntarioToken.mint(_voluntarios[i], recompensa);
+                // Marcar al voluntario como aprobado en EventManager
+                eventManager.aprobarVoluntario(_eventoId, _voluntarios[i], msg.sender);
             }
         }
     }
