@@ -89,8 +89,10 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       reFocus={reFocus}
       prefix={
         ensName ? (
-          <div className="flex bg-base-300 rounded-l-full items-center">
-            {isEnsAvatarLoading && <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>}
+          <div className="flex rounded-l-full items-center">
+            {!isEnsAvatarLoading && (
+              <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>
+            )}
             {ensAvatar ? (
               <span className="w-[35px]">
                 {
@@ -101,19 +103,12 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
             ) : null}
             <span className="text-accent px-2">{enteredEnsName ?? ensName}</span>
           </div>
-        ) : (
-          (isEnsNameLoading || isEnsAddressLoading) && (
-            <div className="flex bg-base-300 rounded-l-full items-center gap-2 pr-2">
-              <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>
-              <div className="skeleton bg-base-200 h-3 w-20"></div>
-            </div>
-          )
-        )
+        ) : null
       }
       suffix={
         // Don't want to use nextJS Image here (and adding remote patterns for the URL)
         // eslint-disable-next-line @next/next/no-img-element
-        value && <img alt="" className="rounded-full!" src={blo(value as `0x${string}`)} width="35" height="35" />
+        value && <img alt="" className="ml-2 rounded-full!" src={blo(value as `0x${string}`)} width="35" height="35" />
       }
     />
   );

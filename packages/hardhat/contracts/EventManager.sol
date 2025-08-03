@@ -53,4 +53,14 @@ contract EventManager {
 
         emit VoluntarioInscrito(eventoId, msg.sender);
     }
+
+    /// @notice Devuelve todos los eventos registrados
+    /// @return Array de structs Evento
+    function obtenerTodosLosEventos() external view returns (Evento[] memory) {
+        Evento[] memory lista = new Evento[](totalEventos);
+        for (uint256 i = 0; i < totalEventos; i++) {
+            lista[i] = eventos[i];
+        }
+        return lista;
+    }
 }

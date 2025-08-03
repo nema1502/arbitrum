@@ -283,6 +283,41 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "obtenerTodosLosEventos",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "id",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "organizador",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "recompensaPorVoluntario",
+                  type: "uint256",
+                },
+                {
+                  internalType: "string",
+                  name: "infoEventoURI",
+                  type: "string",
+                },
+              ],
+              internalType: "struct EventManager.Evento[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "totalEventos",
           outputs: [
             {
