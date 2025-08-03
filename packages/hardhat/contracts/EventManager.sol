@@ -205,6 +205,14 @@ contract EventManager {
         evento.category = category;
     }
 
+    function obtenerDatosEvento(
+        uint256 eventoId
+    ) external view returns (address organizador, uint256 recompensaPorVoluntario) {
+        require(eventoId < totalEventos, "Evento no existe");
+        Evento storage evento = eventos[eventoId];
+        return (evento.organizador, evento.recompensaPorVoluntario);
+    }
+
     /// @notice Obtener información de un voluntario inscrito en un evento
     /// @param eventoId ID del evento
     /// @param voluntario Dirección del voluntario
@@ -263,9 +271,6 @@ contract EventManager {
         require(inscritos[eventoId][voluntario], "El voluntario no esta inscrito");
         require(solicitante == eventos[eventoId].organizador, "No eres el organizador");
 
-        // Actualizar el estado de aprobación a true
         datosVoluntarios[eventoId][voluntario].aprobado = true;
-
-        emit VoluntarioAprobado(eventoId, voluntario);
     }
 }

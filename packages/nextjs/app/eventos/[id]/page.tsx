@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useAccount } from "wagmi";
 import { CalendarIcon, MapPinIcon, TicketIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import { EventType } from "~~/app/page";
 import { AddressInput } from "~~/components/scaffold-eth";
@@ -12,10 +14,13 @@ import { getDefaultEventData, parseEventoData } from "~~/utils/evento-parser";
 const EventProfilePage = () => {
   const params = useParams();
   const id = params?.id;
+
+  const { address: connectedAddress } = useAccount();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(connectedAddress ?? "");
   const [eventData, setEventData] = useState<EventType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,7 +52,6 @@ const EventProfilePage = () => {
       setAddress("");
     } catch (error) {
       console.error("Error al inscribirse:", error);
-      alert("Hubo un error al inscribirte. Por favor, intenta de nuevo.");
     }
   };
 
@@ -102,14 +106,14 @@ const EventProfilePage = () => {
           <div className="card-body">
             <div className="flex flex-col md:flex-row gap-6">
               {/* Logo e información básica */}
-              <div className="md:w-1/3">
+              <div className="md:w-1/3 flex items-center">
                 <div className="relative h-48 w-48 mx-auto">
                   <Image
                     src={eventData.logoUrl}
                     alt={`Logo de ${eventData.title}`}
                     fill
                     unoptimized
-                    className="object-contain"
+                    className="object-cover rounded-md"
                   />
                 </div>
               </div>
@@ -141,6 +145,11 @@ const EventProfilePage = () => {
                   <TicketIcon className="h-5 w-5 mr-2" />
                   Participar
                 </button>
+
+                <Link href={`/eventos/${id}/voluntarios`} className="btn btn-secondary ml-2">
+                  <UserGroupIcon className="h-5 w-5 mr-2" />
+                  Participantes
+                </Link>
               </div>
             </div>
           </div>

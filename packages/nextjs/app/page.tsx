@@ -98,7 +98,7 @@ const Home: NextPage = () => {
           <div className="flex justify-center items-center h-[70vh]">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
-        ) : eventosData.length === 0 ? (
+        ) : eventosContract?.length === 0 ? (
           // Estado sin eventos
           <div className="flex justify-center items-center h-[70vh]">
             <div className="text-center">
@@ -145,7 +145,7 @@ const Home: NextPage = () => {
                         </div>
                       </div>
                       <Link href={`/eventos/${event.id}`}>
-                        <button className="btn btn-primary">Learn More</button>
+                        <button className="btn btn-primary">Aprender Más</button>
                       </Link>
                     </div>
                   </div>
@@ -200,7 +200,7 @@ const Home: NextPage = () => {
             {/* Featured events section */}
             <div className="flex flex-col w-full items-center justify-center px-4 py-8">
               <div className="w-full flex max-w-screen-2xl flex-col items-center justify-center">
-                <h2 className="text-3xl font-bold mb-8 text-center">Featured Events</h2>
+                <h2 className="text-3xl font-bold mb-8 text-center">Eventos Cercanos</h2>
                 <ResponsiveGrid>
                   {eventosData.map(event => (
                     <div key={event.id} className="card bg-base-100 shadow-xl">
@@ -223,7 +223,7 @@ const Home: NextPage = () => {
                         </div>
                         <div className="card-actions justify-end mt-4">
                           <Link href={`/eventos/${event.id}`}>
-                            <button className="btn btn-primary btn-sm">View Details</button>
+                            <button className="btn btn-primary btn-sm">Ver Detalles</button>
                           </Link>
                         </div>
                       </div>

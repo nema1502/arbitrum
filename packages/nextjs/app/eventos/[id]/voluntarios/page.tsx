@@ -26,12 +26,12 @@ const VolunteersPage = () => {
   };
 
   return (
-    <div className="container mx-auto mt-10 p-4">
+    <div className="mt-10 p-4">
       <h1 className="text-3xl font-bold mb-8 text-center">Voluntarios de Evento</h1>
 
       <div className="w-full flex items-center justify-center">
-        <div className="max-w-screen-xl w-full overflow-x-auto shadow-lg rounded-lg">
-          <table className="table w-full bg-base-100">
+        <div className="max-w-screen-lg w-full overflow-x-auto shadow-lg rounded-lg">
+          <table className="table  w-full bg-base-100">
             <thead>
               <tr className="bg-primary text-primary-content">
                 <th>Nombre</th>

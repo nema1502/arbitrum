@@ -8,6 +8,7 @@
 ## packages/hardhat
 
 - Contracts deployed using hardhat
+- Run tests using `cd packages/hardhat && yarn test`
 
 ## More instructions
 

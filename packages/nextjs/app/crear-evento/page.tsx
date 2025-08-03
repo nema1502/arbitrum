@@ -49,15 +49,15 @@ const CrearEventoPage: NextPage = () => {
         ],
       });
       // Limpiar el formulario después de enviar
-      setRecompensa("");
+      setRecompensa("100");
       setTitle("");
       setDescription("");
       setLongDescription("");
-      setImageUrl("");
-      setLogoUrl("");
-      setDate("");
+      setImageUrl("https://placehold.co/1200x600/3b82f6/ffffff?text=New+Event+Picture");
+      setLogoUrl("https://placehold.co/200x200/3b82f6/ffffff?text=Logo");
+      setDate("2025-12-12");
       setLocation("");
-      setCategory("");
+      setCategory(randomDefaultCategory);
     } catch (error) {
       console.error("Error al crear el evento:", error);
       alert("Error al crear el evento. Consulta la consola para más detalles.");
@@ -66,7 +66,7 @@ const CrearEventoPage: NextPage = () => {
 
   return (
     <div className="container mx-auto mt-10 p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Crear un Nuevo Evento</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center">Crear Nuevo Evento</h1>
       <div className="max-w-2xl mx-auto p-6 card bg-base-100">
         <form onSubmit={handleSubmit}>
           {/* Título */}

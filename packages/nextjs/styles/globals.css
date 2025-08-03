@@ -22,6 +22,12 @@
   --color-accent: #0c9c6c;
 }
 
+.btn {
+  &:is(:disabled, [disabled], .btn-disabled) {
+    --btn-fg: color-mix(in oklch, var(--color-base-content) 50%, #0000);
+  }
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     CanjeManager: {
-      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      address: "0xD5724171C2b7f0AA717a324626050BD05767e2C6",
       abi: [
         {
           inputs: [
@@ -40,6 +40,61 @@ const deployedContracts = {
           type: "event",
         },
         {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "id",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "creador",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "title",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "tokenCost",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "category",
+              type: "string",
+            },
+          ],
+          name: "RecompensaCreada",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "recompensaId",
+              type: "uint256",
+            },
+            {
+              internalType: "bool",
+              name: "nuevoEstado",
+              type: "bool",
+            },
+          ],
+          name: "cambiarEstadoRecompensa",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
           inputs: [
             {
               internalType: "uint256",
@@ -56,12 +111,32 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "_costo",
+              name: "tokenCost",
               type: "uint256",
             },
             {
               internalType: "string",
-              name: "_metadataURI",
+              name: "title",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "imageUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "provider",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "category",
               type: "string",
             },
           ],
@@ -71,13 +146,126 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "nextRecompensaId",
-          outputs: [
+          inputs: [
             {
               internalType: "uint256",
-              name: "",
+              name: "recompensaId",
               type: "uint256",
+            },
+          ],
+          name: "obtenerRecompensa",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "id",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "creador",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "title",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "imageUrl",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "provider",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "tokenCost",
+                  type: "uint256",
+                },
+                {
+                  internalType: "string",
+                  name: "category",
+                  type: "string",
+                },
+                {
+                  internalType: "bool",
+                  name: "activa",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct CanjeManager.Recompensa",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "obtenerTodasLasRecompensas",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "id",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "creador",
+                  type: "address",
+                },
+                {
+                  internalType: "string",
+                  name: "title",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "imageUrl",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "provider",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "tokenCost",
+                  type: "uint256",
+                },
+                {
+                  internalType: "string",
+                  name: "category",
+                  type: "string",
+                },
+                {
+                  internalType: "bool",
+                  name: "activa",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct CanjeManager.Recompensa[]",
+              name: "",
+              type: "tuple[]",
             },
           ],
           stateMutability: "view",
@@ -104,19 +292,52 @@ const deployedContracts = {
               type: "address",
             },
             {
+              internalType: "string",
+              name: "title",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "imageUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "provider",
+              type: "string",
+            },
+            {
               internalType: "uint256",
-              name: "costo",
+              name: "tokenCost",
               type: "uint256",
             },
             {
               internalType: "string",
-              name: "metadataURI",
+              name: "category",
               type: "string",
             },
             {
               internalType: "bool",
               name: "activa",
               type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalRecompensas",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -137,10 +358,10 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 4,
+      deployedOnBlock: 387,
     },
     EventManager: {
-      address: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+      address: "0xfbC22278A96299D91d41C453234d97b4F5Eb9B2d",
       abi: [
         {
           anonymous: false,
@@ -648,6 +869,30 @@ const deployedContracts = {
               name: "eventoId",
               type: "uint256",
             },
+          ],
+          name: "obtenerDatosEvento",
+          outputs: [
+            {
+              internalType: "address",
+              name: "organizador",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "recompensaPorVoluntario",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
             {
               internalType: "address",
               name: "voluntario",
@@ -842,10 +1087,10 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 14,
+      deployedOnBlock: 125,
     },
     ValidacionManager: {
-      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+      address: "0xAA292E8611aDF267e563f334Ee42320aC96D0463",
       abi: [
         {
           inputs: [
@@ -862,6 +1107,56 @@ const deployedContracts = {
           ],
           stateMutability: "nonpayable",
           type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address[]",
+              name: "voluntarios",
+              type: "address[]",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "recompensa",
+              type: "uint256",
+            },
+          ],
+          name: "AsistenciaMultipleValidada",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "voluntario",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "recompensa",
+              type: "uint256",
+            },
+          ],
+          name: "AsistenciaUnicaValidada",
+          type: "event",
         },
         {
           inputs: [],
@@ -927,10 +1222,10 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 15,
+      deployedOnBlock: 156,
     },
     VoluntarioToken: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xf953b3A269d80e3eB0F2947630Da976B896A8C5b",
       abi: [
         {
           inputs: [],
@@ -1520,7 +1815,7 @@ const deployedContracts = {
         revokeRole: "@openzeppelin/contracts/access/AccessControl.sol",
         supportsInterface: "@openzeppelin/contracts/access/AccessControl.sol",
       },
-      deployedOnBlock: 1,
+      deployedOnBlock: 155,
     },
   },
 } as const;
