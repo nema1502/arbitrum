@@ -13,13 +13,15 @@ export type EventType = {
   id: number;
   title: string;
   description: string;
-  longDescription?: string;
+  longDescription: string;
   imageUrl: string;
   logoUrl: string;
   date: string;
   location: string;
-  attendees: number;
+  attendees?: number;
   category: string;
+  organizador?: string;
+  recompensa?: string;
 };
 // Mock events data
 const MOCK_EVENTS: EventType[] = [
@@ -27,10 +29,11 @@ const MOCK_EVENTS: EventType[] = [
     id: 1,
     title: "Community Cleanup Day",
     description: "Join us for a day of cleaning up the local park and surrounding areas.",
+    longDescription:
+      "Join us for a day of cleaning up the local park and surrounding areas. Bring your friends and family!",
     imageUrl: "https://placehold.co/1200x600/3b82f6/ffffff?text=Community+Cleanup+Day",
     date: "2025-08-15",
     logoUrl: "https://placehold.co/200x200/3b82f6/ffffff?text=Logo",
-
     location: "Central Park",
     attendees: 45,
     category: "Environmental",
@@ -39,9 +42,10 @@ const MOCK_EVENTS: EventType[] = [
     id: 2,
     title: "Tech Workshop: Blockchain Basics",
     description: "Learn the fundamentals of blockchain technology and how it's changing the world.",
+    longDescription:
+      "In this workshop, you will learn the fundamentals of blockchain technology and how it's revolutionizing various industries.",
     imageUrl: "https://placehold.co/1200x600/10b981/ffffff?text=Blockchain+Workshop",
     logoUrl: "https://placehold.co/200x200/3b82f6/ffffff?text=Logo",
-
     date: "2025-08-20",
     location: "Tech Hub Downtown",
     attendees: 120,
@@ -51,9 +55,10 @@ const MOCK_EVENTS: EventType[] = [
     id: 3,
     title: "Charity Run for Education",
     description: "5K run to raise funds for local schools and educational programs.",
+    longDescription:
+      "Join us for a 5K run to raise funds for local schools and educational programs. All proceeds go directly to improving educational resources.",
     imageUrl: "https://placehold.co/1200x600/ef4444/ffffff?text=Charity+Run",
     logoUrl: "https://placehold.co/200x200/3b82f6/ffffff?text=Logo",
-
     date: "2025-09-05",
     location: "Riverside Track",
     attendees: 230,
@@ -63,9 +68,10 @@ const MOCK_EVENTS: EventType[] = [
     id: 4,
     title: "Community Garden Planting",
     description: "Help plant new trees and flowers in our community garden.",
+    longDescription:
+      "Help us make our community more beautiful by planting new trees and flowers in our community garden. No experience necessary!",
     imageUrl: "https://placehold.co/1200x600/f59e0b/ffffff?text=Garden+Planting",
     logoUrl: "https://placehold.co/200x200/3b82f6/ffffff?text=Logo",
-
     date: "2025-09-12",
     location: "Community Garden",
     attendees: 78,
@@ -75,9 +81,10 @@ const MOCK_EVENTS: EventType[] = [
     id: 5,
     title: "Local Business Fair",
     description: "Support local businesses and entrepreneurs at our annual fair.",
+    longDescription:
+      "Our annual business fair brings together local entrepreneurs and business owners to showcase their products and services to the community.",
     imageUrl: "https://placehold.co/1200x600/8b5cf6/ffffff?text=Business+Fair",
     logoUrl: "https://placehold.co/200x200/3b82f6/ffffff?text=Logo",
-
     date: "2025-09-25",
     location: "Town Square",
     attendees: 350,

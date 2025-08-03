@@ -3,30 +3,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { formatEther } from "viem";
 import { CalendarIcon, MapPinIcon, TicketIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import { EventType } from "~~/app/page";
 import { AddressInput } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-
-// Datos de evento de ejemplo para desarrollo de UI
-const MOCK_EVENT: EventType = {
-  id: 1,
-  title: "Día de Limpieza Comunitaria",
-  description: "Únete a nosotros para un día de limpieza en el parque local.",
-  longDescription:
-    "Este día de limpieza comunitaria tiene como objetivo reunir a voluntarios de todos los ámbitos " +
-    "para ayudar a restaurar la belleza de nuestro parque local. Recogeremos basura, plantaremos nuevas flores " +
-    "y repararemos los equipos del parque infantil. Es una gran oportunidad para conocer a tus vecinos, " +
-    "aprender sobre conservación ambiental y marcar una diferencia tangible en nuestra comunidad. " +
-    "Se proporcionarán todos los materiales de limpieza, pero si lo prefieres, puedes traer tus propios guantes y botella de agua. " +
-    "El evento concluirá con un pequeño picnic para todos los voluntarios.",
-  imageUrl: "https://placehold.co/1200x600/3b82f6/ffffff?text=Día+de+Limpieza+Comunitaria",
-  logoUrl: "https://placehold.co/200x200/3b82f6/ffffff?text=Logo",
-  date: "2025-08-15",
-  location: "Parque Central",
-  attendees: 45,
-  category: "Ambiental",
-};
 
 const EventProfilePage = () => {
   const params = useParams();
@@ -35,6 +16,8 @@ const EventProfilePage = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [eventData, setEventData] = useState<EventType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Contract read hook
   const { data: evento } = useScaffoldReadContract({
@@ -56,12 +39,12 @@ const EventProfilePage = () => {
     try {
       await writeContractAsync({
         functionName: "inscribirseAEvento",
-        args: [BigInt(id ? id.toString() : "0")],
+        args: [BigInt(id ? id.toString() : "0"), name, email, phone],
       });
-      alert("¡Te has inscrito exitosamente al evento!");
       setName("");
       setEmail("");
       setPhone("");
+      setAddress("");
     } catch (error) {
       console.error("Error al inscribirse:", error);
       alert("Hubo un error al inscribirte. Por favor, intenta de nuevo.");
@@ -70,10 +53,49 @@ const EventProfilePage = () => {
 
   useEffect(() => {
     if (id) {
-      console.log("Event ID:", id);
-      console.log("Event data:", evento);
+      if (evento) {
+        try {
+          setEventData({
+            id: Number(evento[0]),
+            organizador: evento[1],
+            recompensa: formatEther(evento[2]),
+            title: evento[3],
+            description: evento[4],
+            longDescription: evento[5],
+            imageUrl: evento[6],
+            logoUrl: evento[7],
+            date: evento[8],
+            location: evento[9],
+            category: evento[10],
+          });
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error parsing event data:", error);
+          // Fallback to mock data
+          setEventData({
+            id: Number(id),
+            title: "Evento (Error)",
+            description: "No se pudieron cargar los detalles del evento",
+            longDescription: "Hubo un error al cargar los detalles completos del evento.",
+            imageUrl: "https://placehold.co/1200x600/ff0000/ffffff?text=Error",
+            logoUrl: "https://placehold.co/200x200/ff0000/ffffff?text=Error",
+            date: new Date().toISOString().split("T")[0],
+            location: "Desconocida",
+            category: "Desconocida",
+          });
+          setIsLoading(false);
+        }
+      }
     }
   }, [id, evento]);
+
+  if (isLoading || !eventData) {
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex isolate flex-col items-center">
@@ -81,8 +103,8 @@ const EventProfilePage = () => {
       <div className="relative w-full h-[50vh] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
         <Image
-          src={MOCK_EVENT.imageUrl}
-          alt={MOCK_EVENT.title}
+          src={eventData.imageUrl}
+          alt={eventData.title}
           fill
           unoptimized
           className="object-cover"
@@ -95,8 +117,8 @@ const EventProfilePage = () => {
       <div className="w-full max-w-4xl px-4 py-8 z-10 -mt-16 relative">
         {/* Descripción corta */}
         <div className="bg-base-100 p-6 rounded-lg shadow-xl mb-8">
-          <h1 className="text-3xl font-bold mb-4">{MOCK_EVENT.title}</h1>
-          <p className="text-lg">{MOCK_EVENT.longDescription}</p>
+          <h1 className="text-3xl font-bold mb-4">{eventData.title}</h1>
+          <p className="text-lg">{eventData.longDescription}</p>
         </div>
 
         {/* Tarjeta de evento con detalles */}
@@ -107,8 +129,8 @@ const EventProfilePage = () => {
               <div className="md:w-1/3">
                 <div className="relative h-48 w-48 mx-auto">
                   <Image
-                    src={MOCK_EVENT.logoUrl}
-                    alt={`Logo de ${MOCK_EVENT.title}`}
+                    src={eventData.logoUrl}
+                    alt={`Logo de ${eventData.title}`}
                     fill
                     unoptimized
                     className="object-contain"
@@ -118,27 +140,30 @@ const EventProfilePage = () => {
 
               {/* Detalles del evento */}
               <div className="md:w-2/3">
-                <h2 className="card-title text-2xl mb-4">{MOCK_EVENT.title}</h2>
-                <div className="badge badge-secondary mb-4">{MOCK_EVENT.category}</div>
+                <h2 className="card-title text-2xl mb-4">{eventData.title}</h2>
+                <div className="badge badge-secondary mb-4">{eventData.category}</div>
 
                 <div className="flex flex-col gap-3 mb-6">
                   <div className="flex items-center">
                     <CalendarIcon className="h-5 w-5 mr-2" />
-                    <span>{new Date(MOCK_EVENT.date).toLocaleDateString()}</span>
+                    <span>{new Date(eventData.date).toLocaleDateString()}</span>
                   </div>
                   <div className="flex items-center">
                     <MapPinIcon className="h-5 w-5 mr-2" />
-                    <span>{MOCK_EVENT.location}</span>
+                    <span>{eventData.location}</span>
                   </div>
                   <div className="flex items-center">
                     <UserGroupIcon className="h-5 w-5 mr-2" />
-                    <span>{MOCK_EVENT.attendees} participantes</span>
+                    <span>Recompensa: {eventData.recompensa} VOL</span>
                   </div>
                 </div>
 
-                <button className="btn btn-primary">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => document.getElementById("inscripcion-form")?.scrollIntoView({ behavior: "smooth" })}
+                >
                   <TicketIcon className="h-5 w-5 mr-2" />
-                  Comprar entradas
+                  Participar
                 </button>
               </div>
             </div>
@@ -146,50 +171,46 @@ const EventProfilePage = () => {
         </div>
 
         {/* Formulario de inscripción de voluntarios */}
-        <div className="bg-base-100 p-6 rounded-lg shadow-xl">
+        <div id="inscripcion-form" className="bg-base-100 p-6 rounded-lg shadow-xl">
           <h2 className="text-2xl font-bold mb-4">Inscripción de Voluntarios</h2>
           <p className="mb-4">
             ¿Te interesa ser voluntario para este evento? ¡Completa el siguiente formulario para inscribirte!
           </p>
 
-          <form onSubmit={handleSubmit} className="">
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">Nombre completo</legend>
-              <input
-                type="text"
-                className="input input-bordered"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                required
-              />
-            </fieldset>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label htmlFor="name" className="block text-lg font-medium mb-2">
+              Nombre Completo
+            </label>
+            <input
+              type="text"
+              className="input input-bordered"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Ingresa tu nombre completo"
+              required
+            />
 
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">Correo electrónico</legend>
-              <input
-                type="email"
-                className="input input-bordered"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-              />
-            </fieldset>
+            <label className="block text-lg font-medium mb-2">Correo electrónico</label>
+            <input
+              type="email"
+              className="input input-bordered"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="correo@ejemplo.com"
+              required
+            />
+            <label className="block text-lg font-medium mb-2">Teléfono</label>
+            <input
+              type="tel"
+              className="input input-bordered"
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              placeholder="+34 123 456 789"
+              required
+            />
 
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">Teléfono</legend>
-              <input
-                type="tel"
-                className="input input-bordered"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                required
-              />
-            </fieldset>
-
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">Dirección de Wallet</legend>
-              <AddressInput onChange={setAddress} value={address} placeholder="Ingresa tu dirección" />
-            </fieldset>
+            <label className="block text-lg font-medium mb-2">Dirección de wallet</label>
+            <AddressInput onChange={setAddress} value={address} placeholder="Tu dirección de wallet" />
             <div className="form-control mt-6">
               <button type="submit" className="btn btn-primary" disabled={isPending}>
                 {isPending ? "Inscribiendo..." : "Inscribirse como voluntario"}

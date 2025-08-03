@@ -166,7 +166,25 @@ const deployedContracts = {
             {
               indexed: false,
               internalType: "string",
-              name: "infoEventoURI",
+              name: "title",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "category",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "date",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "location",
               type: "string",
             },
           ],
@@ -188,9 +206,156 @@ const deployedContracts = {
               name: "voluntario",
               type: "address",
             },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "nombre",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "email",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "telefono",
+              type: "string",
+            },
           ],
           name: "VoluntarioInscrito",
           type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "title",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "longDescription",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "imageUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "logoUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "date",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "location",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "category",
+              type: "string",
+            },
+          ],
+          name: "actualizarEvento",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_category",
+              type: "string",
+            },
+          ],
+          name: "buscarEventosPorCategoria",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "id",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "organizador",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "recompensaPorVoluntario",
+                  type: "uint256",
+                },
+                {
+                  internalType: "string",
+                  name: "title",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "longDescription",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "imageUrl",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "logoUrl",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "date",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "location",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "category",
+                  type: "string",
+                },
+              ],
+              internalType: "struct EventManager.Evento[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
         {
           inputs: [
@@ -201,13 +366,111 @@ const deployedContracts = {
             },
             {
               internalType: "string",
-              name: "infoEventoURI",
+              name: "title",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "longDescription",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "imageUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "logoUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "date",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "location",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "category",
               type: "string",
             },
           ],
           name: "crearEvento",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "datosVoluntarios",
+          outputs: [
+            {
+              internalType: "string",
+              name: "nombre",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "email",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "telefono",
+              type: "string",
+            },
+            {
+              internalType: "address",
+              name: "direccion",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "voluntario",
+              type: "address",
+            },
+          ],
+          name: "estaInscrito",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -237,7 +500,42 @@ const deployedContracts = {
             },
             {
               internalType: "string",
-              name: "infoEventoURI",
+              name: "title",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "longDescription",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "imageUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "logoUrl",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "date",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "location",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "category",
               type: "string",
             },
           ],
@@ -250,6 +548,21 @@ const deployedContracts = {
               internalType: "uint256",
               name: "eventoId",
               type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "nombre",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "email",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "telefono",
+              type: "string",
             },
           ],
           name: "inscribirseAEvento",
@@ -282,6 +595,52 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "eventoId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "voluntario",
+              type: "address",
+            },
+          ],
+          name: "obtenerDatosVoluntario",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "string",
+                  name: "nombre",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "email",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "telefono",
+                  type: "string",
+                },
+                {
+                  internalType: "address",
+                  name: "direccion",
+                  type: "address",
+                },
+              ],
+              internalType: "struct EventManager.DatosVoluntario",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [],
           name: "obtenerTodosLosEventos",
           outputs: [
@@ -304,7 +663,42 @@ const deployedContracts = {
                 },
                 {
                   internalType: "string",
-                  name: "infoEventoURI",
+                  name: "title",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "longDescription",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "imageUrl",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "logoUrl",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "date",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "location",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "category",
                   type: "string",
                 },
               ],

@@ -10,7 +10,14 @@ interface IEventManager {
         uint256 id;
         address organizador;
         uint256 recompensaPorVoluntario;
-        string infoEventoURI;
+        string title;
+        string description;
+        string longDescription;
+        string imageUrl;
+        string logoUrl;
+        string date;
+        string location;
+        string category;
     }
     function eventos(uint256 eventoId) external view returns (Evento memory);
 }
