@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { formatEther } from "viem";
 import { CalendarIcon, MapPinIcon, TicketIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import { EventType } from "~~/app/page";
 import { AddressInput } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { getDefaultEventData, parseEventoData } from "~~/utils/evento-parser";
 
 const EventProfilePage = () => {
   const params = useParams();
@@ -52,39 +52,15 @@ const EventProfilePage = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      if (evento) {
-        try {
-          setEventData({
-            id: Number(evento[0]),
-            organizador: evento[1],
-            recompensa: formatEther(evento[2]),
-            title: evento[3],
-            description: evento[4],
-            longDescription: evento[5],
-            imageUrl: evento[6],
-            logoUrl: evento[7],
-            date: evento[8],
-            location: evento[9],
-            category: evento[10],
-          });
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error parsing event data:", error);
-          // Fallback to mock data
-          setEventData({
-            id: Number(id),
-            title: "Evento (Error)",
-            description: "No se pudieron cargar los detalles del evento",
-            longDescription: "Hubo un error al cargar los detalles completos del evento.",
-            imageUrl: "https://placehold.co/1200x600/ff0000/ffffff?text=Error",
-            logoUrl: "https://placehold.co/200x200/ff0000/ffffff?text=Error",
-            date: new Date().toISOString().split("T")[0],
-            location: "Desconocida",
-            category: "Desconocida",
-          });
-          setIsLoading(false);
-        }
+    if (id && evento) {
+      try {
+        setEventData(parseEventoData(evento));
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error parsing event data:", error);
+        // Fallback to mock data
+        setEventData(getDefaultEventData(id.toString()));
+        setIsLoading(false);
       }
     }
   }, [id, evento]);
